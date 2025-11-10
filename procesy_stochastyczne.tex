@@ -1,21 +1,3 @@
-Oczywiście. Przeanalizowałem oba pliki, scaliłem je, a następnie przeprowadziłem weryfikację i korektę merytoryczną oraz edytorską, aby stworzyć jeden, kompletny i spójny skrypt.
-
-Poniżej znajduje się finalna, poprawiona wersja całego skryptu.
-
-### Kluczowe wprowadzone zmiany i poprawki:
-
-1.  **Struktura i Przejścia:** Dodałem nową, główną sekcję "Zachowanie graniczne łańcuchów Markowa", która logicznie kontynuuje temat klasyfikacji stanów z poprzedniej części. Wprowadzenie do nowej sekcji zostało napisane tak, aby zapewnić płynne przejście.
-2.  **Spójność Notacji:** Ujednoliciłem notację prawdopodobieństwa do `P(...)` w całym dokumencie (zamiast mieszania `P` i `\mathbb{P}`). Styl strzałek w diagramach TikZ (`Stealth`) również został ujednolicony.
-3.  **Spójność Środowisk:** Wszystkie definicje, twierdzenia, lematy itp. używają teraz polskich nazw zdefiniowanych w preambule (`twierdzenie`, `definicja`, `lemat`, `wniosek`, `obserwacja`, `przykład`) i są numerowane w ramach sekcji, co zapewnia spójność całego dokumentu.
-4.  **Poprawki Merytoryczne:**
-    *   W dowodzie twierdzenia Perrona-Frobeniusa dla macierzy stochastycznych doprecyzowałem, że rozważamy wektor własny $x \in \mathbb{C}^N$ i jego współrzędne w ciele liczb zespolonych.
-    *   Uporządkowałem i wyjaśniłem związek między ergodycznością, rozkładem granicznym a rozkładem stacjonarnym, podkreślając, że dla łańcuchów ergodycznych te pojęcia się pokrywają.
-    *   Uzupełniłem brakujący `\end{document}` i usunąłem zbędne elementy (metadane, powtórzone preambuły) z pliku `ostatni_wyklad.tex`.
-5.  **Kompletność:** Cała zawartość merytoryczna z obu plików została włączona do finalnego skryptu.
-
-Oto kompletny, zweryfikowany i poprawiony skrypt:
-
-```latex
 \documentclass{article}
 
 % --- PAKIETY PODSTAWOWE ---
@@ -1092,4 +1074,3 @@ Dla macierzy stochastycznej $P$, granica $\lim_{n \to \infty} P^n$ istnieje wted
 Dla łańcuchów nieprzywiedlnych i aperiodycznych (które są ergodyczne), $1$ jest jedyną wartością własną na okręgu jednostkowym i jej krotności (algebraiczna i geometryczna) są równe 1, co gwarantuje zbieżność do macierzy $P^\infty$ o identycznych wierszach.
 
 \end{document}
-```
