@@ -1,0 +1,43 @@
+name: Build LaTeX PDF
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'procesy_stochastyczne.tex'
+      - '.github/workflows/latex-pdf.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: procesy_stochastyczne.tex
+          args: -pdf -interaction=nonstopmode
+
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d-%H%M')" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: pdf-${{ steps.date.outputs.date }}
+          name: Lecture Notes - ${{ steps.date.outputs.date }}
+          body: |
+            Automatically generated PDF from procesy_stochastyczne.tex
+
+            Commit: ${{ github.sha }}
+          files: procesy_stochastyczne.pdf
+          draft: false
+          prerelease: false
