@@ -36,6 +36,8 @@
 
 \renewcommand{\qedsymbol}{$\blacksquare$} % Zmiana symbolu końca dowodu
 
+\DeclareMathOperator{\NWD}{NWD} % Definicja operatora NWD
+
 \begin{document}
 
 \section{Procesy stochastyczne}
@@ -1050,7 +1052,7 @@ Zawsze zachodzi nierówność $1 \le \text{geom. mult.}(\lambda) \le \text{alg. 
 \end{definition}
 
 \begin{twierdzenie}[Twierdzenie Perrona-Frobeniusa dla macierzy stochastycznych]
-Jeśli $P$ jest macierzą stochastyczną, to jej promień spektralny $\rho(P) = \max \{ |\lambda| : \lambda \text{ jest wartością własną } P \}$ jest równy 1.
+Jeśli $P$ jest macierzą stochastyczną, to jej promień spektralny $\rho(P) = \max \{ |\lambda| : \lambda \in \sigma(P) \}$ jest równy 1.
 \begin{proof}
 Wiemy, że $1$ jest wartością własną $P$, więc $\rho(P) \ge 1$. Pokażemy, że $\rho(P) \le 1$.
 Przypuśćmy nie wprost, że istnieje wartość własna $\lambda \in \mathbb{C}$ taka, że $|\lambda|>1$ oraz odpowiadający jej prawostronny wektor własny $x \in \mathbb{C}^N$, czyli $Px = \lambda x$.
@@ -1067,10 +1069,244 @@ Ponieważ $|x_m| > 0$, musiałoby być $|\lambda| \le 1$, co jest sprzeczne z na
 \end{proof}
 \end{twierdzenie}
 
+\begin{obserwacja}[Znaczenie wartości własnych na okręgu jednostkowym]
+Powyższe twierdzenie gwarantuje jedynie, że nie istnieją wartości własne o module większym niż 1. Nie wyklucza ono jednak istnienia innych wartości własnych (poza $\lambda=1$) o module równym 1, na przykład $\lambda=-1$ lub wartości zespolonych.
+
+Istnienie takich wartości własnych jest związane z \textbf{cyklicznością} łańcucha Markowa. Jeśli $\lambda=-1$ jest wartością własną, łańcuch może wykazywać zachowanie okresowe (np. oscylować między dwoma zbiorami stanów), co uniemożliwia zbieżność ciągu macierzy $P^n$ do jednej, stałej macierzy granicznej.
+
+\begin{example}
+Rozważmy macierz $P = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$. Jest to macierz stochastyczna. Jej wielomian charakterystyczny to $\det(P-\lambda I) = \lambda^2 - 1 = 0$, więc wartościami własnymi są $\lambda_1=1$ i $\lambda_2=-1$. Obie leżą na okręgu jednostkowym, więc twierdzenie jest spełnione. Jednak potęgi macierzy $P$ nie zbiegają:
+$$ P^2 = I, \quad P^3 = P, \quad P^4 = I, \quad \dots $$
+Ciąg $(P^n)$ oscyluje i nie ma granicy. Aby granica istniała, wartość własna $\lambda=1$ musi być \textbf{dominująca} w tym sensie, że jest jedyną wartością własną o module równym 1 (oraz musi spełniać warunek równości krotności algebraicznej i geometrycznej, jak wspomniano dalej).
+\end{example}
+
+\begin{obserwacja}[Sztuczka ze śladem]
+    Ślad macierzy kwadratowej, $\text{tr}(A)$, jest równy sumie jej wartości własnych (liczonych z krotnościami algebraicznymi). Jest to użyteczna własność przy szybkiej analizie małych macierzy.
+\end{obserwacja}
+\end{obserwacja}
+
+\begin{twierdzenie}[Warunek zbieżności dla macierzy stochastycznych]
+    Dla macierzy stochastycznej $P$, granica $\lim_{n \to \infty} P^n$ istnieje wtedy i tylko wtedy, gdy $\lambda=1$ jest jedyną wartością własną o module równym 1.
+\end{twierdzenie}
+
+\begin{definition}[Dominująca wartość własna]
+    Mówimy, że $\lambda=1$ jest dominującą wartością własną macierzy stochastycznej $P$, jeśli dla każdej innej wartości własnej $\tilde{\lambda} \in \sigma(P)$ zachodzi $|\tilde{\lambda}| < 1$.
+\end{definition}
+
+Gdy ten warunek jest spełniony, granica istnieje. Dodatkowo, jeśli wartość własna $\lambda=1$ jest \textbf{prosta} (ma krotność algebraiczną równą 1), to łańcuch jest ergodyczny, a macierz graniczna ma postać, w której wszystkie wiersze są identyczne. 
+
+
+
+\subsection{Struktura macierzy granicznej}
+
+Załóżmy, że $\lambda=1$ jest prostą i dominującą wartością własną macierzy stochastycznej $P$. Jak widzieliśmy, granica $P^\infty = \lim_{n \to \infty} P^n$ istnieje. Aby zrozumieć jej strukturę, ponownie wykorzystamy rozkład Jordana $P = Q J Q^{-1}$.
+
+Granicę możemy zapisać jako:
+$$ P^\infty = Q \cdot (\lim_{n \to \infty} J^n) \cdot Q^{-1} $$
+Ponieważ wszystkie wartości własne w bloku $J'$ mają moduł mniejszy od 1, potęgi tego bloku zbiegają do zera. W związku z tym macierz graniczna potęg $J$ ma bardzo prostą postać — jest to macierz zerowa z wyjątkiem jedynki w lewym górnym rogu:
+$$ J^\infty = \lim_{n \to \infty} J^n = \begin{pmatrix} 1 & 0 & \dots & 0 \\ 0 & 0 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & 0 \end{pmatrix} $$
+Teraz musimy zrozumieć strukturę macierzy $Q$ i $Q^{-1}$.
+
+\begin{enumerate}
+    \item \textbf{Macierz wektorów własnych $Q$:} Jej kolumny to (uogólnione) prawostronne wektory własne macierzy $P$. Ponieważ $\lambda=1$ jest wartością prostą, pierwsza kolumna $Q$ to prawostronny wektor własny dla $\lambda=1$. Dla macierzy stochastycznej jest to wektor złożony z samych jedynek.
+    $$ Q = \begin{bmatrix} | & | & & | \\ \vec{v}_1 & \vec{v}_2 & \dots & \vec{v}_n \\ | & | & & | \end{bmatrix}, \quad \text{gdzie } \vec{v}_1 = \begin{pmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{pmatrix} $$
+
+    \item \textbf{Macierz odwrotna $Q^{-1}$:} Jej wiersze to (uogólnione) lewostronne wektory własne. Pierwszy wiersz $Q^{-1}$ to lewostronny wektor własny dla $\lambda=1$. Po znormalizowaniu tak, aby jego współrzędne sumowały się do 1, jest to dokładnie rozkład stacjonarny $\vec{\pi}$.
+    $$ Q^{-1} = \begin{bmatrix} \text{---} & \vec{u}_1^T & \text{---} \\ \text{---} & \vec{u}_2^T & \text{---} \\ & \vdots & \\ \text{---} & \vec{u}_n^T & \text--- \end{bmatrix}, \quad \text{gdzie } \vec{u}_1^T = \vec{\pi} = (\pi_1, \pi_2, \dots, \pi_n) $$
+\end{enumerate}
+
+Mając te trzy macierze, możemy obliczyć iloczyn $P^\infty = Q J^\infty Q^{-1}$. Rozbijmy to na dwa kroki:
+
+\textbf{Krok 1: Obliczenie $Q J^\infty$}
+Mnożenie $Q$ z prawej strony przez $J^\infty$ "wybiera" tylko pierwszą kolumnę $Q$ i zeruje pozostałe:
+$$ Q J^\infty = \begin{bmatrix} | & | & & | \\ \vec{v}_1 & \vec{v}_2 & \dots & \vec{v}_n \\ | & | & & | \end{bmatrix} \begin{pmatrix} 1 & 0 & \dots & 0 \\ 0 & 0 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & 0 \end{pmatrix} = \begin{bmatrix} | & | & & | \\ \vec{v}_1 & \vec{0} & \dots & \vec{0} \\ | & | & & | \end{bmatrix} $$
+
+\textbf{Krok 2: Obliczenie $(Q J^\infty) Q^{-1}$}
+Teraz mnożymy wynik z lewej strony przez $Q^{-1}$. To sprowadza się do iloczynu zewnętrznego pierwszej kolumny z pierwszego wyniku i pierwszego wiersza z $Q^{-1}$:
+$$ P^\infty = \begin{bmatrix} | & | & & | \\ \vec{v}_1 & \vec{0} & \dots & \vec{0} \\ | & | & & | \end{bmatrix} \begin{bmatrix} \text{---} & \vec{u}_1^T & \text{---} \\ \text{---} & \vec{u}_2^T & \text{---} \\ & \vdots & \\ \text{---} & \vec{u}_n^T & \text--- \end{bmatrix} = \vec{v}_1 \cdot \vec{u}_1^T $$
+Podstawiając konkretne wektory $\vec{v}_1$ i $\vec{u}_1^T = \vec{\pi}$, otrzymujemy ostateczną postać macierzy granicznej:
+$$ P^\infty = \begin{pmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{pmatrix} \begin{pmatrix} \pi_1 & \pi_2 & \dots & \pi_n \end{pmatrix} = \begin{pmatrix} \pi_1 & \pi_2 & \dots & \pi_n \\ \pi_1 & \pi_2 & \dots & \pi_n \\ \vdots & \vdots & \ddots & \vdots \\ \pi_1 & \pi_2 & \dots & \pi_n \end{pmatrix} $$
+W ten sposób pokazaliśmy, dlaczego macierz graniczna dla ergodycznego łańcucha Markowa składa się z identycznych wierszy, z których każdy jest rozkładem stacjonarnym.
+
+
+\begin{twierdzenie}
+    Niech $(X_n)_n$ będzie łańcuchem Markowa na skończonej przestrzeni stanów $S$ z macierzą przejść $P$. Jeśli wartość własna $\lambda=1$ jest dominująca i prosta w widmie $\sigma(P)$, to:
+    \begin{enumerate}
+        \item Istnieje rozkład graniczny, tzn. dla dowolnego rozkładu początkowego $\vec{\alpha}$ granica $\lim_{n \to \infty} \vec{\alpha} P^n$ istnieje i jest taka sama.
+        \item Istnieje dokładnie jeden rozkład stacjonarny $\vec{\pi}$ (czyli wektor spełniający $\vec{\pi} P = \vec{\pi}$).
+        \item Rozkład graniczny jest równy rozkładowi stacjonarnemu.
+    \end{enumerate}
+\end{twierdzenie}
+
+\begin{lemat}
+    Każdy rozkład graniczny jest rozkładem stacjonarnym.
+\end{lemat}
+\begin{proof}
+    Niech $\vec{\nu}$ będzie rozkładem granicznym, czyli $\vec{\nu} = \lim_{n \to \infty} \vec{\alpha} P^n$ dla pewnego początkowego $\vec{\alpha}$. Wtedy:
+    $$ \vec{\nu} P = \left( \lim_{n \to \infty} \vec{\alpha} P^n \right) P = \lim_{n \to \infty} (\vec{\alpha} P^n \cdot P) = \lim_{n \to \infty} \vec{\alpha} P^{n+1} = \vec{\nu} $$
+    Zatem $\vec{\nu}$ jest rozkładem stacjonarnym.
+\end{proof}
+
+\begin{obserwacja}
+    Implikacja w drugą stronę nie jest prawdziwa. Istnienie rozkładu stacjonarnego (nawet jedynego) nie gwarantuje istnienia rozkładu granicznego.
+\end{obserwacja}
+
+\begin{example}
+    Rozważmy ponownie macierz $P = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$. Jedynym rozkładem stacjonarnym jest $\vec{\pi} = [1/2, 1/2]$, ponieważ $[1/2, 1/2]P = [1/2, 1/2]$. Jednak, jak widzieliśmy, granica $\lim P^n$ nie istnieje. Dla rozkładu początkowego $\vec{\alpha} = [1, 0]$, ciąg rozkładów $\vec{\alpha}P^n$ oscyluje między $[1, 0]$ a $[0, 1]$ i nie zbiega.
+\end{example}
+
+\section{Twierdzenie Perrona-Frobeniusa}
+
+Kluczowym narzędziem do wykazania, że $\lambda=1$ jest prostą i dominującą wartością własną, jest twierdzenie Perrona-Frobeniusa. Najpierw podamy jego wersję dla macierzy ściśle dodatnich.
+
+\begin{twierdzenie}[Perron, 1907]
+    Niech $A$ będzie macierzą kwadratową o elementach ściśle dodatnich ($A > 0$, tzn. $A_{ij} > 0$ dla wszystkich $i,j$). Wtedy:
+    \begin{enumerate}
+        \item Promień spektralny $\rho(A)$ jest wartością własną macierzy $A$.
+        \item $\rho(A)$ jest dominującą wartością własną, tzn. dla każdej innej wartości własnej $\lambda \in \sigma(A)$ zachodzi $|\lambda| < \rho(A)$.
+        \item $\rho(A) > 0$.
+        \item Krotność algebraiczna wartości własnej $\rho(A)$ jest równa 1 (jest to wartość prosta).
+        \item Istnieją prawostronny wektor własny $\vec{v}$ i lewostronny wektor własny $\vec{u}$ odpowiadające wartości własnej $\rho(A)$, których wszystkie współrzędne są ściśle dodatnie ($\vec{v} > 0, \vec{u} > 0$).
+    \end{enumerate}
+\end{twierdzenie}
+
+\begin{obserwacja}
+    Twierdzenie to stanowi teoretyczną podstawę algorytmu PageRank używanego przez Google.
+\end{obserwacja}
+
+Zastosujmy to twierdzenie do macierzy stochastycznych.
+
 \begin{wniosek}
-Dla macierzy stochastycznej $P$, granica $\lim_{n \to \infty} P^n$ istnieje wtedy i tylko wtedy, gdy dla każdej wartości własnej $\lambda$ o module $|\lambda|=1$, jest ona równa $1$ i jej krotność algebraiczna jest równa geometrycznej.
+    Niech $P$ będzie macierzą stochastyczną o elementach ściśle dodatnich ($P>0$). Wtedy:
+    \begin{itemize}
+        \item Wartość własna $\lambda=1$ ma krotność algebraiczną (i geometryczną) równą 1.
+        \item Dla każdej innej wartości własnej $\tilde{\lambda} \in \sigma(P)$, zachodzi $|\tilde{\lambda}| < 1$.
+        \item Istnieją ściśle dodatnie wektory własne: prawostronny $\vec{v}$ (np. $\vec{v}=[1, \dots, 1]^T$) i lewostronny $\vec{u}$ (rozkład stacjonarny).
+    \end{itemize}
 \end{wniosek}
 
-Dla łańcuchów nieprzywiedlnych i aperiodycznych (które są ergodyczne), $1$ jest jedyną wartością własną na okręgu jednostkowym i jej krotności (algebraiczna i geometryczna) są równe 1, co gwarantuje zbieżność do macierzy $P^\infty$ o identycznych wierszach.
+\begin{proof}
+    Ponieważ $P$ jest stochastyczna, wiemy, że $\rho(P)=1$. Ponieważ $P>0$, z twierdzenia Perrona wynika, że $\rho(P)=1$ jest prostą i dominującą wartością własną.
+\end{proof}
+
+Zatem dla łańcucha Markowa, którego macierz przejścia $P$ jest ściśle dodatnia, mamy zagwarantowane istnienie unikalnego rozkładu stacjonarnego, który jest jednocześnie rozkładem granicznym.
+
+\subsection{Macierze regularne}
+
+Założenie $P>0$ jest bardzo silne. Można je osłabić.
+
+\begin{example}
+    Rozważmy macierz $P = \begin{pmatrix} 0 & 1 \\ 1/2 & 1/2 \end{pmatrix}$. Nie jest ona ściśle dodatnia. Jej widmo to $\sigma(P)=\{1, -1/2\}$. Wartość $\lambda=1$ jest prosta i dominująca, więc łańcuch zbiega do równowagi. Zauważmy, że:
+    $$ P^2 = \begin{pmatrix} 1/2 & 1/2 \\ 1/4 & 3/4 \end{pmatrix} > 0 $$
+\end{example}
+
+To prowadzi do pojęcia macierzy regularnej.
+
+\begin{definition}[Macierz regularna]
+    Macierz stochastyczną $P$ nazywamy \textbf{regularną}, jeśli istnieje taka liczba naturalna $n \in \mathbb{N}$, że macierz $P^n$ ma wszystkie elementy ściśle dodatnie ($P^n>0$).
+\end{definition}
+
+\begin{twierdzenie}
+    Jeśli macierz stochastyczna $P$ jest regularna, to $\lambda=1$ jest jej prostą i dominującą wartością własną.
+\end{twierdzenie}
+
+\begin{proof}
+    Niech $n_0$ będzie takie, że $P^{n_0} > 0$. Zastosujmy twierdzenie Perrona do macierzy $P^{n_0}$. Wynika z niego, że $\rho(P^{n_0})=1$ jest prostą i dominującą wartością własną macierzy $P^{n_0}$. Musimy pokazać, że te własności przenoszą się na macierz $P$.
+
+    \begin{obserwacja}
+        Jeśli $\vec{x}$ jest wektorem własnym macierzy $A$ dla wartości własnej $\lambda$, to jest też wektorem własnym macierzy $A^k$ dla wartości własnej $\lambda^k$.
+        \begin{proof}
+        $A\vec{x} = \lambda\vec{x} \implies A^2\vec{x} = A(A\vec{x}) = A(\lambda\vec{x}) = \lambda(A\vec{x}) = \lambda^2\vec{x}$. Dowód przez indukcję jest trywialny.
+        \end{proof}
+    \end{obserwacja}
+
+    \textbf{1. Dominacja:} Dowód przez sprzeczność. Załóżmy, że $\lambda=1$ nie jest dominująca dla $P$. Oznacza to, że istnieje inna wartość własna $\tilde{\lambda} \in \sigma(P)$ taka, że $|\tilde{\lambda}|=1$ i $\tilde{\lambda} \neq 1$.
+    Zgodnie z obserwacją, $\tilde{\lambda}^{n_0}$ jest wartością własną macierzy $P^{n_0}$. Co więcej, $|\tilde{\lambda}^{n_0}| = |\tilde{\lambda}|^{n_0} = 1^{n_0} = 1$.
+    Otrzymaliśmy dwie różne wartości własne $P^{n_0}$ o module 1: jedną równą $1^{n_0}=1$, a drugą $\tilde{\lambda}^{n_0}$. To stoi w sprzeczności z twierdzeniem Perrona dla macierzy $P^{n_0}>0$, które gwarantuje, że $1$ jest jedyną wartością własną o module 1. Zatem nasze założenie musiało być fałszywe.
+
+    \textbf{2. Prostota:} Dowód przez sprzeczność. Załóżmy, że $\lambda=1$ nie jest prostą wartością własną $P$. Oznacza to, że jej krotność geometryczna jest większa od 1, czyli istnieją co najmniej dwa liniowo niezależne wektory własne $\vec{v}_1, \vec{v}_2$ dla $\lambda=1$. Ale te wektory są również wektorami własnymi macierzy $P^{n_0}$ dla wartości własnej $1^{n_0}=1$. To implikuje, że krotność geometryczna wartości własnej 1 dla macierzy $P^{n_0}$ jest co najmniej 2. To ponownie stoi w sprzeczności z twierdzeniem Perrona, które mówi, że dla $P^{n_0}>0$ wartość własna 1 jest prosta.
+
+    Zatem dla regularnej macierzy $P$, wartość $\lambda=1$ musi być prosta i dominująca. $\Box$
+\end{proof}
+
+\begin{wniosek}
+    Jeśli łańcuch Markowa jest regularny (jego macierz przejścia jest regularna), to zbiega on do unikalnego rozkładu stacjonarnego.
+\end{wniosek}
+
+
+\subsection{Przypadki patologiczne: przywiedlność i okresowość}
+
+Warunek regularności ($P^n > 0$ dla pewnego $n$) jest kluczowy dla prostych wyników zbieżności. Może on jednak nie być spełniony z dwóch powodów:
+
+\textbf{1. Łańcuch jest przywiedlny (redukowalny):} Jeśli graf stanów nie jest silnie spójny, oznacza to, że istnieją rozłączne klasy komunikujące się. Gdy proces znajdzie się w jednej z takich klas, nigdy jej nie opuści. W konsekwencji, macierz $P^n$ nigdy nie będzie miała wszystkich elementów ściśle dodatnich, ponieważ przejścia między tymi klasami są niemożliwe.
+
+\textbf{2. Łańcuch jest okresowy (mimo że nieprzywiedlny):} Łańcuch może być nieprzywiedlny (każdy stan jest osiągalny z każdego innego), ale wciąż nieregularny. Dzieje się tak, gdy powroty do stanów mogą następować tylko w wielokrotnościach pewnej liczby $d > 1$. Wtedy macierz $P^n$ nigdy nie stanie się ściśle dodatnia, ponieważ zera będą pojawiać się w sposób cykliczny, co doskonale ilustrują macierze permutacji.
+
+\begin{example}
+    Macierze permutacji generują okresowe łańcuchy.
+    $P_1 = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$, $P_2 = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 1 & 0 & 0 \end{pmatrix}$.
+    Potęgi tych macierzy nigdy nie staną się dodatnie, ponieważ zera pozostaną na stałych pozycjach, jedynie przesuwając się cyklicznie. To prowadzi do pojęcia okresu.
+\end{example}
+
+\begin{definition}[Okres stanu]
+    Okresem stanu $j \in S$ nazywamy liczbę:
+    $$ o(j) = \NWD \{ n \ge 1 : P_{jj}^{(n)} > 0 \} $$
+    czyli największy wspólny dzielnik długości wszystkich ścieżek prowadzących ze stanu $j$ do samego siebie. Jeśli zbiór $\{...\}$ jest pusty, przyjmujemy $o(j)=\infty$.
+    \begin{itemize}
+        \item Jeśli $o(j) = 1$, stan $j$ nazywamy \textbf{nieokresowym}.
+        \item Jeśli $o(j) = d > 1$, stan $j$ nazywamy \textbf{okresowym o okresie $d$}.
+    \end{itemize}
+\end{definition}
+
+\begin{lemat}
+    Wszystkie stany w tej samej klasie komunikującej się mają ten sam okres.
+\end{lemat}
+
+\begin{example}
+    Dla $P = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$, powrót do stanu 1 jest możliwy w 2, 4, 6, ... krokach.
+    $o(1) = \NWD\{2, 4, 6, \dots\} = 2$. Podobnie $o(2)=2$.
+\end{example}
+
+\begin{example}
+    Rozważmy łańcuch opisany macierzą $P = \begin{pmatrix} 0 & 1/2 & 1/2 \\ 1 & 0 & 0 \\ 1 & 0 & 0 \end{pmatrix}$ i odpowiadający mu graf stanów.
+    
+    \begin{center}
+    \begin{tikzpicture}[->, >=Stealth, shorten >=1pt, auto, node distance=2.5cm, semithick]
+      \node[state] (1)              {$1$};
+      \node[state] (2) [left of=1] {$2$};
+      \node[state] (3) [right of=1] {$3$};
+      
+      \path (1) edge [bend left] node {1/2} (2)
+                edge [bend right] node {1/2} (3);
+      \path (2) edge [bend left] node {1} (1);
+      \path (3) edge [bend right] node {1} (1);
+    \end{tikzpicture}
+    \end{center}
+    
+    Łańcuch jest nieprzywiedlny.
+    Możliwe powroty do stanu 1: $1 \to 2 \to 1$ (2 kroki), $1 \to 3 \to 1$ (2 kroki), $1 \to 2 \to 1 \to 2 \to 1$ (4 kroki) itd. Zbiór długości to $\{2, 4, 6, \dots\}$. Zatem $o(1)=2$. Ponieważ wszystkie stany są w jednej klasie, $o(2)=o(3)=2$.
+\end{example}
+
+\begin{example}
+    Rozważmy łańcuch z macierzą przejścia $P = \begin{pmatrix} 1/2 & 1/2 \\ 1 & 0 \end{pmatrix}$.
+    
+    \begin{center}
+    \begin{tikzpicture}[->, >=Stealth, shorten >=1pt, auto, node distance=2.5cm, semithick]
+      \node[state] (1)              {$1$};
+      \node[state] (2) [right of=1] {$2$};
+      
+      \path (1) edge [loop above] node {1/2} (1)
+                edge [bend left]  node {1/2} (2);
+      \path (2) edge [bend left]  node {1} (1);
+    \end{tikzpicture}
+    \end{center}
+    
+    Łańcuch ten jest nieprzywiedlny.
+    Możliwe powroty do stanu 1: $1 \to 1$ (1 krok), $1 \to 2 \to 1$ (2 kroki), $1 \to 1 \to 1$ (2 kroki), $1 \to 2 \to 1 \to 1$ (3 kroki) itd.
+    Zbiór długości powrotów do stanu 1 zawiera $\{1, 2, 3, \dots\}$. Zatem $o(1) = \NWD\{1, 2, 3, \dots\} = 1$. Stan 1 jest nieokresowy.
+    Ponieważ łańcuch jest nieprzywiedlny i jeden ze stanów (stan 1) jest nieokresowy, cały łańcuch jest nieokresowy.
+\end{example}
+
+Ostatecznie, warunkiem koniecznym i wystarczającym na zbieżność do unikalnego rozkładu stacjonarnego jest to, aby łańcuch był nieprzywiedlny i nieokresowy.
 
 \end{document}
